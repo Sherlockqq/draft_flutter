@@ -4,11 +4,16 @@
 
 import 'dart:convert';
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'season_data.g.dart';
+
 SeasonData seasonDataFromJson(String str) =>
     SeasonData.fromJson(json.decode(str));
 
 String seasonDataToJson(SeasonData data) => json.encode(data.toJson());
 
+@JsonSerializable(explicitToJson: true)
 class SeasonData {
   SeasonData({
     required this.seasonDataGet,
@@ -19,77 +24,65 @@ class SeasonData {
     required this.response,
   });
 
+  @JsonKey(name: 'get')
   String seasonDataGet;
+  @JsonKey(name: 'parameters')
   Parameters parameters;
+  @JsonKey(name: 'errors')
   List<dynamic> errors;
+  @JsonKey(name: 'results')
   int results;
+  @JsonKey(name: 'paging')
   Paging paging;
+  @JsonKey(name: 'response')
   List<Response> response;
+
+  factory SeasonData.fromJson(Map<String, dynamic> json) =>
+      _$SeasonDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SeasonDataToJson(this);
 
   int getSeasonFromSeasonData() {
     return response[0].seasons[0].year;
   }
-
-  factory SeasonData.fromJson(Map<String, dynamic> json) => SeasonData(
-        seasonDataGet: json["get"],
-        parameters: Parameters.fromJson(json["parameters"]),
-        errors: List<dynamic>.from(json["errors"].map((x) => x)),
-        results: json["results"],
-        paging: Paging.fromJson(json["paging"]),
-        response: List<Response>.from(
-            json["response"].map((x) => Response.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "get": seasonDataGet,
-        "parameters": parameters.toJson(),
-        "errors": List<dynamic>.from(errors.map((x) => x)),
-        "results": results,
-        "paging": paging.toJson(),
-        "response": List<dynamic>.from(response.map((x) => x.toJson())),
-      };
 }
 
+@JsonSerializable()
 class Paging {
   Paging({
     required this.current,
     required this.total,
   });
 
+  @JsonKey(name: 'current')
   int current;
+  @JsonKey(name: 'total')
   int total;
 
-  factory Paging.fromJson(Map<String, dynamic> json) => Paging(
-        current: json["current"],
-        total: json["total"],
-      );
+  factory Paging.fromJson(Map<String, dynamic> json) => _$PagingFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "current": current,
-        "total": total,
-      };
+  Map<String, dynamic> toJson() => _$PagingToJson(this);
 }
 
+@JsonSerializable()
 class Parameters {
   Parameters({
     required this.id,
     required this.current,
   });
 
+  @JsonKey(name: 'id')
   String id;
+  @JsonKey(name: 'current')
   String current;
 
-  factory Parameters.fromJson(Map<String, dynamic> json) => Parameters(
-        id: json["id"],
-        current: json["current"],
-      );
+  factory Parameters.fromJson(Map<String, dynamic> json) =>
+      _$ParametersFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "current": current,
-      };
+  Map<String, dynamic> toJson() => _$ParametersToJson(this);
 }
 
+@JsonSerializable(explicitToJson: true)
 class Response {
   Response({
     required this.league,
@@ -97,24 +90,20 @@ class Response {
     required this.seasons,
   });
 
+  @JsonKey(name: 'league')
   League league;
+  @JsonKey(name: 'country')
   Country country;
+  @JsonKey(name: 'seasons')
   List<Season> seasons;
 
-  factory Response.fromJson(Map<String, dynamic> json) => Response(
-        league: League.fromJson(json["league"]),
-        country: Country.fromJson(json["country"]),
-        seasons:
-            List<Season>.from(json["seasons"].map((x) => Season.fromJson(x))),
-      );
+  factory Response.fromJson(Map<String, dynamic> json) =>
+      _$ResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "league": league.toJson(),
-        "country": country.toJson(),
-        "seasons": List<dynamic>.from(seasons.map((x) => x.toJson())),
-      };
+  Map<String, dynamic> toJson() => _$ResponseToJson(this);
 }
 
+@JsonSerializable()
 class Country {
   Country({
     required this.name,
@@ -122,23 +111,20 @@ class Country {
     required this.flag,
   });
 
+  @JsonKey(name: 'name')
   String name;
+  @JsonKey(name: 'code')
   String code;
+  @JsonKey(name: 'flag')
   String flag;
 
-  factory Country.fromJson(Map<String, dynamic> json) => Country(
-        name: json["name"],
-        code: json["code"],
-        flag: json["flag"],
-      );
+  factory Country.fromJson(Map<String, dynamic> json) =>
+      _$CountryFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "code": code,
-        "flag": flag,
-      };
+  Map<String, dynamic> toJson() => _$CountryToJson(this);
 }
 
+@JsonSerializable()
 class League {
   League({
     required this.id,
@@ -147,26 +133,21 @@ class League {
     required this.logo,
   });
 
+  @JsonKey(name: 'id')
   int id;
+  @JsonKey(name: 'name')
   String name;
+  @JsonKey(name: 'type')
   String type;
+  @JsonKey(name: 'logo')
   String logo;
 
-  factory League.fromJson(Map<String, dynamic> json) => League(
-        id: json["id"],
-        name: json["name"],
-        type: json["type"],
-        logo: json["logo"],
-      );
+  factory League.fromJson(Map<String, dynamic> json) => _$LeagueFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "type": type,
-        "logo": logo,
-      };
+  Map<String, dynamic> toJson() => _$LeagueToJson(this);
 }
 
+@JsonSerializable(explicitToJson: true)
 class Season {
   Season({
     required this.year,
@@ -176,31 +157,23 @@ class Season {
     required this.coverage,
   });
 
+  @JsonKey(name: 'year')
   int year;
+  @JsonKey(name: 'start')
   DateTime start;
+  @JsonKey(name: 'end')
   DateTime end;
+  @JsonKey(name: 'current')
   bool current;
+  @JsonKey(name: 'coverage')
   Coverage coverage;
 
-  factory Season.fromJson(Map<String, dynamic> json) => Season(
-        year: json["year"],
-        start: DateTime.parse(json["start"]),
-        end: DateTime.parse(json["end"]),
-        current: json["current"],
-        coverage: Coverage.fromJson(json["coverage"]),
-      );
+  factory Season.fromJson(Map<String, dynamic> json) => _$SeasonFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "year": year,
-        "start":
-            "${start.year.toString().padLeft(4, '0')}-${start.month.toString().padLeft(2, '0')}-${start.day.toString().padLeft(2, '0')}",
-        "end":
-            "${end.year.toString().padLeft(4, '0')}-${end.month.toString().padLeft(2, '0')}-${end.day.toString().padLeft(2, '0')}",
-        "current": current,
-        "coverage": coverage.toJson(),
-      };
+  Map<String, dynamic> toJson() => _$SeasonToJson(this);
 }
 
+@JsonSerializable(explicitToJson: true)
 class Coverage {
   Coverage({
     required this.fixtures,
@@ -213,42 +186,32 @@ class Coverage {
     required this.predictions,
     required this.odds,
   });
-
+  @JsonKey(name: 'fixtures')
   Fixtures fixtures;
+  @JsonKey(name: 'standings')
   bool standings;
+  @JsonKey(name: 'players')
   bool players;
+  @JsonKey(name: 'top_scorers')
   bool topScorers;
+  @JsonKey(name: 'top_assists')
   bool topAssists;
+  @JsonKey(name: 'top_cards')
   bool topCards;
+  @JsonKey(name: 'injuries')
   bool injuries;
+  @JsonKey(name: 'predictions')
   bool predictions;
+  @JsonKey(name: 'odds')
   bool odds;
 
-  factory Coverage.fromJson(Map<String, dynamic> json) => Coverage(
-        fixtures: Fixtures.fromJson(json["fixtures"]),
-        standings: json["standings"],
-        players: json["players"],
-        topScorers: json["top_scorers"],
-        topAssists: json["top_assists"],
-        topCards: json["top_cards"],
-        injuries: json["injuries"],
-        predictions: json["predictions"],
-        odds: json["odds"],
-      );
+  factory Coverage.fromJson(Map<String, dynamic> json) =>
+      _$CoverageFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "fixtures": fixtures.toJson(),
-        "standings": standings,
-        "players": players,
-        "top_scorers": topScorers,
-        "top_assists": topAssists,
-        "top_cards": topCards,
-        "injuries": injuries,
-        "predictions": predictions,
-        "odds": odds,
-      };
+  Map<String, dynamic> toJson() => _$CoverageToJson(this);
 }
 
+@JsonSerializable()
 class Fixtures {
   Fixtures({
     required this.events,
@@ -257,22 +220,17 @@ class Fixtures {
     required this.statisticsPlayers,
   });
 
+  @JsonKey(name: 'events')
   bool events;
+  @JsonKey(name: 'lineups')
   bool lineups;
+  @JsonKey(name: 'statistics_fixtures')
   bool statisticsFixtures;
+  @JsonKey(name: 'statistics_players')
   bool statisticsPlayers;
 
-  factory Fixtures.fromJson(Map<String, dynamic> json) => Fixtures(
-        events: json["events"],
-        lineups: json["lineups"],
-        statisticsFixtures: json["statistics_fixtures"],
-        statisticsPlayers: json["statistics_players"],
-      );
+  factory Fixtures.fromJson(Map<String, dynamic> json) =>
+      _$FixturesFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "events": events,
-        "lineups": lineups,
-        "statistics_fixtures": statisticsFixtures,
-        "statistics_players": statisticsPlayers,
-      };
+  Map<String, dynamic> toJson() => _$FixturesToJson(this);
 }

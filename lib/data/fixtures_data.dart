@@ -1,16 +1,26 @@
 import 'dart:convert';
 
 import 'package:draft_flutter/domain/fixtures.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'fixtures_data.g.dart';
 
 FixturesData fixturesDataFromJson(String str) =>
     FixturesData.fromJson(json.decode(str));
 
+@JsonSerializable(explicitToJson: true)
 class FixturesData {
+  @JsonKey(name: 'get')
   String get;
+  @JsonKey(name: 'parameters')
   Parameters parameters;
+  @JsonKey(name: 'errors')
   List<dynamic> errors;
+  @JsonKey(name: 'results')
   int results;
+  @JsonKey(name: 'paging')
   Paging paging;
+  @JsonKey(name: 'response')
   List<Response> response;
 
   FixturesData(
@@ -21,23 +31,10 @@ class FixturesData {
       required this.paging,
       required this.response});
 
-  factory FixturesData.fromJson(Map<String, dynamic> json) => FixturesData(
-      get: json['get'],
-      parameters: Parameters.fromJson(json['parameters']),
-      errors: List<dynamic>.from(json["errors"].map((x) => x)),
-      results: json['results'],
-      paging: Paging.fromJson(json['paging']),
-      response: List<Response>.from(
-          json["response"].map((x) => Response.fromJson(x))));
+  factory FixturesData.fromJson(Map<String, dynamic> json) =>
+      _$FixturesDataFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "get": get,
-        "parameters": parameters.toJson(),
-        "errors": List<dynamic>.from(errors.map((x) => x)),
-        "results": results,
-        "paging": paging.toJson(),
-        "response": List<dynamic>.from(response.map((x) => x.toJson())),
-      };
+  Map<String, dynamic> toJson() => _$FixturesDataToJson(this);
 
   Map<int, List<MatchFixtures>> getListMatchFixturesFromFixturesData() {
     var map = <int, List<MatchFixtures>>{};
@@ -70,8 +67,11 @@ class FixturesData {
       int.parse(value.substring(value.length - 2, value.length).trim());
 }
 
+@JsonSerializable()
 class Parameters {
+  @JsonKey(name: 'league')
   String league;
+  @JsonKey(name: 'season')
   String season;
 
   Parameters({
@@ -80,38 +80,36 @@ class Parameters {
   });
 
   factory Parameters.fromJson(Map<String, dynamic> json) =>
-      Parameters(league: json['league'], season: json['season']);
+      _$ParametersFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['league'] = league;
-    data['season'] = season;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$ParametersToJson(this);
 }
 
+@JsonSerializable()
 class Paging {
+  @JsonKey(name: 'current')
   int current;
+  @JsonKey(name: 'total')
   int total;
 
   Paging({required this.current, required this.total});
 
-  factory Paging.fromJson(Map<String, dynamic> json) =>
-      Paging(current: json['current'], total: json['total']);
+  factory Paging.fromJson(Map<String, dynamic> json) => _$PagingFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['current'] = current;
-    data['total'] = total;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$PagingToJson(this);
 }
 
+@JsonSerializable(explicitToJson: true)
 class Response {
+  @JsonKey(name: 'fixture')
   Fixture fixture;
+  @JsonKey(name: 'league')
   League league;
+  @JsonKey(name: 'teams')
   Teams teams;
+  @JsonKey(name: 'goals')
   Goals goals;
+  @JsonKey(name: 'score')
   Score score;
 
   Response(
@@ -121,33 +119,29 @@ class Response {
       required this.goals,
       required this.score});
 
-  factory Response.fromJson(Map<String, dynamic> json) => Response(
-        fixture: Fixture.fromJson(json['fixture']),
-        league: League.fromJson(json['league']),
-        teams: Teams.fromJson(json['teams']),
-        goals: Goals.fromJson(json['goals']),
-        score: Score.fromJson(json['score']),
-      );
+  factory Response.fromJson(Map<String, dynamic> json) =>
+      _$ResponseFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['fixture'] = fixture.toJson();
-    data['league'] = league.toJson();
-    data['teams'] = teams.toJson();
-    data['goals'] = goals.toJson();
-    data['score'] = score.toJson();
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$ResponseToJson(this);
 }
 
+@JsonSerializable(explicitToJson: true)
 class Fixture {
+  @JsonKey(name: 'id')
   int id;
+  @JsonKey(name: 'referee')
   String? referee;
+  @JsonKey(name: 'timezone')
   String timezone;
+  @JsonKey(name: 'date')
   String date;
+  @JsonKey(name: 'timestamp')
   int timestamp;
+  @JsonKey(name: 'periods')
   Periods periods;
+  @JsonKey(name: 'venue')
   Venue venue;
+  @JsonKey(name: 'status')
   Status status;
 
   Fixture(
@@ -160,100 +154,74 @@ class Fixture {
       required this.venue,
       required this.status});
 
-  factory Fixture.fromJson(Map<String, dynamic> json) => Fixture(
-      id: json['id'],
-      referee: json['referee'],
-      timezone: json['timezone'],
-      date: json['date'],
-      timestamp: json['timestamp'],
-      periods: Periods.fromJson(json['periods']),
-      venue: Venue.fromJson(json['venue']),
-      status: Status.fromJson(json['status']));
+  factory Fixture.fromJson(Map<String, dynamic> json) =>
+      _$FixtureFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = id;
-    data['referee'] = referee;
-    data['timezone'] = timezone;
-    data['date'] = date;
-    data['timestamp'] = timestamp;
-    data['periods'] = periods.toJson();
-    data['venue'] = venue.toJson();
-    data['status'] = status.toJson();
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$FixtureToJson(this);
 }
 
+@JsonSerializable()
 class Periods {
+  @JsonKey(name: 'first')
   int? first;
+  @JsonKey(name: 'second')
   int? second;
 
   Periods({this.first, this.second});
 
-  factory Periods.fromJson(Map<String, dynamic> json) => Periods(
-        first: json['first'],
-        second: json['second'],
-      );
+  factory Periods.fromJson(Map<String, dynamic> json) =>
+      _$PeriodsFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['first'] = first;
-    data['second'] = second;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$PeriodsToJson(this);
 }
 
+@JsonSerializable()
 class Venue {
+  @JsonKey(name: 'id')
   int id;
+  @JsonKey(name: 'name')
   String name;
+  @JsonKey(name: 'city')
   String city;
 
   Venue({required this.id, required this.name, required this.city});
 
-  factory Venue.fromJson(Map<String, dynamic> json) => Venue(
-        id: json['id'],
-        name: json['name'],
-        city: json['city'],
-      );
+  factory Venue.fromJson(Map<String, dynamic> json) => _$VenueFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = id;
-    data['name'] = name;
-    data['city'] = city;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$VenueToJson(this);
 }
 
+@JsonSerializable()
 class Status {
+  @JsonKey(name: 'long')
   String long;
+  @JsonKey(name: 'short')
   String short;
+  @JsonKey(name: 'elapsed')
   int? elapsed;
 
   Status({required this.long, required this.short, this.elapsed});
 
-  factory Status.fromJson(Map<String, dynamic> json) => Status(
-        long: json['long'],
-        short: json['short'],
-        elapsed: json['elapsed'],
-      );
+  factory Status.fromJson(Map<String, dynamic> json) => _$StatusFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['long'] = long;
-    data['short'] = short;
-    data['elapsed'] = elapsed;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$StatusToJson(this);
 }
 
+@JsonSerializable()
 class League {
+  @JsonKey(name: 'id')
   int id;
+  @JsonKey(name: 'name')
   String name;
+  @JsonKey(name: 'country')
   String country;
+  @JsonKey(name: 'logo')
   String logo;
+  @JsonKey(name: 'flag')
   String flag;
+  @JsonKey(name: 'season')
   int season;
+  @JsonKey(name: 'round')
   String round;
 
   League(
@@ -265,96 +233,66 @@ class League {
       required this.season,
       required this.round});
 
-  factory League.fromJson(Map<String, dynamic> json) => League(
-        id: json['id'],
-        name: json['name'],
-        country: json['country'],
-        logo: json['logo'],
-        flag: json['flag'],
-        season: json['season'],
-        round: json['round'],
-      );
+  factory League.fromJson(Map<String, dynamic> json) => _$LeagueFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = id;
-    data['name'] = name;
-    data['country'] = country;
-    data['logo'] = logo;
-    data['flag'] = flag;
-    data['season'] = season;
-    data['round'] = round;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$LeagueToJson(this);
 }
 
+@JsonSerializable(explicitToJson: true)
 class Teams {
+  @JsonKey(name: 'home')
   Team home;
+  @JsonKey(name: 'away')
   Team away;
 
   Teams({required this.home, required this.away});
 
-  factory Teams.fromJson(Map<String, dynamic> json) => Teams(
-        home: Team.fromJson(json['home']),
-        away: Team.fromJson(json['away']),
-      );
+  factory Teams.fromJson(Map<String, dynamic> json) => _$TeamsFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['home'] = home.toJson();
-    data['away'] = away.toJson();
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$TeamsToJson(this);
 }
 
+@JsonSerializable()
 class Team {
+  @JsonKey(name: 'id')
   int id;
+  @JsonKey(name: 'name')
   String name;
+  @JsonKey(name: 'logo')
   String logo;
+  @JsonKey(name: 'winner')
   bool? winner;
 
   Team({required this.id, required this.name, required this.logo, this.winner});
 
-  factory Team.fromJson(Map<String, dynamic> json) => Team(
-        id: json['id'],
-        name: json['name'],
-        logo: json['logo'],
-        winner: json['winner'],
-      );
+  factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = id;
-    data['name'] = name;
-    data['logo'] = logo;
-    data['winner'] = winner;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$TeamToJson(this);
 }
 
+@JsonSerializable()
 class Goals {
+  @JsonKey(name: 'home')
   int? home;
+  @JsonKey(name: 'away')
   int? away;
 
   Goals({this.home, this.away});
 
-  factory Goals.fromJson(Map<String, dynamic> json) => Goals(
-        home: json['home'],
-        away: json['away'],
-      );
+  factory Goals.fromJson(Map<String, dynamic> json) => _$GoalsFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['home'] = home;
-    data['away'] = away;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$GoalsToJson(this);
 }
 
+@JsonSerializable(explicitToJson: true)
 class Score {
+  @JsonKey(name: 'halftime')
   Goals halftime;
+  @JsonKey(name: 'fulltime')
   Goals fulltime;
+  @JsonKey(name: 'extratime')
   Goals extratime;
+  @JsonKey(name: 'penalty')
   Goals penalty;
 
   Score(
@@ -363,18 +301,7 @@ class Score {
       required this.extratime,
       required this.penalty});
 
-  factory Score.fromJson(Map<String, dynamic> json) => Score(
-      halftime: Goals.fromJson(json['halftime']),
-      fulltime: Goals.fromJson(json['fulltime']),
-      extratime: Goals.fromJson(json['extratime']),
-      penalty: Goals.fromJson(json['penalty']));
+  factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['halftime'] = halftime.toJson();
-    data['fulltime'] = fulltime.toJson();
-    data['extratime'] = extratime.toJson();
-    data['penalty'] = penalty.toJson();
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$ScoreToJson(this);
 }

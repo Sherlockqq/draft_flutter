@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:draft_flutter/cubit/fixtures_cubit.dart';
 import 'package:draft_flutter/data/fixtures_repository.dart';
+import 'package:draft_flutter/data/retrofit/api_client.dart';
 import 'package:draft_flutter/domain/states.dart';
 import 'package:draft_flutter/ui/fixtures/fixtures_page.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,7 @@ class _FixturesScreen extends State<FixturesScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<FixturesCubit>(
         create: (context) =>
-            FixturesCubit(FixturesRepository())..getCurrentSeason(),
+            FixturesCubit(FixturesRepository(ApiClient(Dio())))..getCurrentSeason(),
         child: Scaffold(
             appBar: AppBar(
               title: const Text("Fixtures"),

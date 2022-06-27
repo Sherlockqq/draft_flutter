@@ -23,7 +23,6 @@ class FixturesCubit extends Cubit<RequestState> {
     }
   }
 
-
   void getFixtures(int season) async {
     try {
       emit(Loading());
@@ -39,5 +38,4 @@ class FixturesCubit extends Cubit<RequestState> {
       emit(Error(e.toString()));
     }
   }
-
 }

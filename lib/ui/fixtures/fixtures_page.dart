@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:draft_flutter/cubit/fixtures_cubit.dart';
 import 'package:draft_flutter/domain/fixtures.dart';
 import 'package:draft_flutter/domain/states.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/fixtures_repository.dart';
+import '../../data/retrofit/api_client.dart';
 
 class FixturePage extends StatefulWidget {
   const FixturePage({Key? key, required this.season}) : super(key: key);
@@ -22,7 +24,7 @@ class _FixturePageState extends State<FixturePage> {
   Widget build(BuildContext context) {
     return BlocProvider<FixturesCubit>(
         create: (context) =>
-            FixturesCubit(FixturesRepository())..getFixtures(widget.season),
+            FixturesCubit(FixturesRepository(ApiClient(Dio())))..getFixtures(widget.season),
         child: Scaffold(
           body: _buildFixturesDisplay(context),
         ));
